@@ -273,12 +273,14 @@ def _test_py2_only_do_not_select(env):
     got = _select_whls(
         whls = [
             "pkg-0.0.1-py2-none-any.whl",
+            "pkg-0.0.1-py2.py3-none-any.whl",
         ],
         want_platforms = ["cp39_linux_x86_64"],
     )
     _match(
         env,
         got,
+        "pkg-0.0.1-py2.py3-none-any.whl",
     )
 
 _tests.append(_test_py2_only_do_not_select)
