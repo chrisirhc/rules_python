@@ -99,12 +99,14 @@ def select_whls(*, whls, want_platforms = [], logger = None):
             logger.trace(lambda: "Deciding whether to use '{}'".format(whl.filename))
 
         supported_implementations = {}
+        supports_py3 = False
         whl_version_min = 0
         for tag in parsed.python_tag.split("."):
             supported_implementations[tag[:2]] = None
 
             if tag.startswith("cp3") or tag.startswith("py3"):
                 version = int(tag[len("..3"):] or 0)
+                supports_py3 = True
             else:
                 # In this case it should be eithor "cp2" or "py2" and we will default
                 # to `whl_version_min` = 0
@@ -116,6 +118,11 @@ def select_whls(*, whls, want_platforms = [], logger = None):
         if not ("cp" in supported_implementations or "py" in supported_implementations):
             if logger:
                 logger.trace(lambda: "Discarding the whl because the whl does not support CPython, whl supported implementations are: {}".format(supported_implementations))
+            continue
+
+        if not supports_py3:
+            if logger:
+                logger.trace(lambda: "Discarding the whl because the whl does not support Python 3")
             continue
 
         if want_abis and parsed.abi_tag not in want_abis:

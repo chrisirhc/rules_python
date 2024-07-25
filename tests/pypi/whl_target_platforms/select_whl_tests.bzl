@@ -269,6 +269,20 @@ def _test_prefer_manylinux_wheels(env):
 
 _tests.append(_test_prefer_manylinux_wheels)
 
+def _test_py2_only_do_not_select(env):
+    got = _select_whls(
+        whls = [
+            "pkg-0.0.1-py2-none-any.whl",
+        ],
+        want_platforms = ["cp39_linux_x86_64"],
+    )
+    _match(
+        env,
+        got,
+    )
+
+_tests.append(_test_py2_only_do_not_select)
+
 def select_whl_test_suite(name):
     """Create the test suite.
 
